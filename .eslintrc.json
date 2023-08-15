@@ -4,27 +4,16 @@
     "plugin:prettier/recommended",
     "plugin:node/recommended",
     "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:jsx-a11y/recommended",
-    "plugin:react/recommended"
+    "plugin:import/warnings"
   ],
-  "plugins": ["prettier", "node", "import", "jsx-a11y", "react"],
+  "plugins": ["prettier", "node", "import"],
   "env": {
-    "browser": true,
     "node": true,
     "es6": true
   },
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
-  },
   "parserOptions": {
     "ecmaVersion": 2023,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
+    "sourceType": "module"
   },
   "rules": {
     "prettier/prettier": "error",
