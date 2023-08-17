@@ -5,7 +5,7 @@ describe('Email', () => {
         it('should create a new Email instance with a valid email address', () => {
             const validEmail = 'test@example.com';
             const email = new Email(validEmail);
-            expect(email.getEmail()).toBe(validEmail);
+            expect(email.value).toBe(validEmail);
         });
 
         it('should throw an error for an invalid email address', () => {
@@ -18,7 +18,7 @@ describe('Email', () => {
         it('should return the stored email address', () => {
             const validEmail = 'test@example.com';
             const email = new Email(validEmail);
-            expect(email.getEmail()).toBe(validEmail);
+            expect(email.value).toBe(validEmail);
         });
     });
 });
