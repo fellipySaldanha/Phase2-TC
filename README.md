@@ -17,7 +17,7 @@ As categorias dos pedidos são:
 - Lanche
 - Acompanhamento
 - Bebida
-- Sobremessa 
+- Sobremessa
 
 ### Pagamento
 
@@ -30,7 +30,7 @@ Ao confirmar pagamento, o pedido é enviado para preparo. O cliente pode acompan
 - Recebido
 - Em preparação
 - Pronto
-- Finalizado 
+- Finalizado
 
 ## Tecnologias
 
@@ -47,6 +47,7 @@ https://miro.com/app/board/uXjVMKvnUGA=/?share_link_id=537199265716
 ![Tech Challenge FASE 01 (1)](https://github.com/fellipySaldanha/tech-challenge/assets/43252661/7e67ffe0-559b-4df0-9a19-fd97cfd867e7)
 
 ## Modelagem de Dados
+
 ![Diagrama de Entidades e Relacionamentos - Delivery System (1)](https://github.com/fellipySaldanha/tech-challenge/assets/43252661/7118b3eb-50cf-4b62-b6a3-8fdb9c5d862d)
 
 ## Iniciar Aplicação
