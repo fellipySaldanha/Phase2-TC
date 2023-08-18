@@ -1,82 +1,46 @@
-import { Request, Response } from "express";
-import HttpServer from "../../../../application/ports/HttpServer";
-import ICustomerRepository from "../core/ports/ICustomerRepository";
-import { ParsedQs } from "qs";
-import CustomerDTO from "../dto/CustomerDTO";
-import Email from '../../../sharedKernel/valueObjects/Email';
-import CPF from '../../../sharedKernel/valueObjects/CPF';
 import ListCustomer from "../usecase/list-customer/ListCustomer";
 import MySQLCustomerRepository from "../infrastructure/MySQLCustomerRepository";
-import { CustomerInputDTO, CustomerOutputDTO } from "../usecase/list-customer/ListCustomerDTO";
+import { ListCustomerInputDTO, ListCustomerOutputDTO } from "../usecase/list-customer/ListCustomerDTO";
+import CreateCustomer from "../usecase/create-customer/CreateCustomer";
+import { CreateCustomerInputDTO, CreateCustomerOutputDTO } from "../usecase/create-customer/CreateCustomerDTO";
+import { DeleteCustomerInputDTO, DeleteCustomerOutputDTO } from "../usecase/delete-customer/DeleteCustomerDTO";
+import DeleteCustomer from "../usecase/delete-customer/DeleteCustomer";
+import UpdateCustomer from "../usecase/update-customer/UpdateCustomer";
+import { UpdateCustomerInputDTO, UpdateCustomerOutputDTO } from '../usecase/update-customer/UpdateCustomerDTO';
 
 export default class CustomerController{
 
     static async getCustomers(searchId?:number, searchCPF?:string): Promise<any>{
-            const listCustomer:ListCustomer = new ListCustomer(new MySQLCustomerRepository());
-                const input: CustomerInputDTO = {
-                params:{
-                    id:searchId,
-                    cpf:searchCPF
-                }
+        const listUseCase:ListCustomer = new ListCustomer(new MySQLCustomerRepository());
+            const input: ListCustomerInputDTO = {
+            params:{
+                id:searchId,
+                cpf:searchCPF
             }
-            const output: CustomerOutputDTO = await listCustomer.execute(input);
-            return output;
+        }
+        const output: ListCustomerOutputDTO = await listUseCase.execute(input);
+        return output;
     }
 
-    // async createCustomer(body:string, response: Response): Promise<any>{
-    //     try {
-    //         const parsedJson: CustomerDTO = body as unknown as CustomerDTO;
-    //         const cpf = new CPF(parsedJson.cpf);
-    //         const email = new Email(parsedJson.email);
-    //         const result = await this.repository.createCustomer(
-    //             parsedJson.name,
-    //             email.getEmail(),
-    //             cpf.getCPF(),
-    //             parsedJson.isActive
-    //         );
-    //         return response.status(200).json(result);;
-    //     } catch (error:any) {
-    //         console.log('Error create customer',error);
-    //         return response.status(400).json({Error:error.message});
-    //     }
-    // }
+    static async createCustomer(body:string): Promise<any>{
+        const createUseCase:CreateCustomer = new CreateCustomer(new MySQLCustomerRepository());
+        const input: CreateCustomerInputDTO = body as unknown as CreateCustomerInputDTO;
+        const output:CreateCustomerOutputDTO = await createUseCase.execute(input);
+        return output;
+    }
 
-    // async updateCustomer(queryParams: ParsedQs, body:string, response:Response): Promise<any>{
-    //     try {
-    //         const parsedJson: CustomerDTO = body as unknown as CustomerDTO;
-    //         const cpf = new CPF(parsedJson.cpf);
-    //         const email = new Email(parsedJson.email);
-    //         if(!queryParams.id){
-    //             return response.status(400).json({ Error: 'Missing parameters. Please provide id' });
-    //         }
-    //         const result = await this.repository.updateCustomer(
-    //             Number(queryParams.id),
-    //             parsedJson.name,
-    //             email.getEmail(),
-    //             cpf.getCPF(),
-    //             parsedJson.isActive
-    //         );
-    //         return response.status(200).json(result);
-    //     } catch (error:any) {
-    //         console.log('Error update customer',error);
-    //         return response.status(400).json({Error:error.message});
-    //     }
-    // }
+    static async updateCustomer(body:string, id:number):Promise<UpdateCustomerOutputDTO>{
+        const updateUseCase = new UpdateCustomer(new MySQLCustomerRepository());
+        let input:UpdateCustomerInputDTO = body as unknown as UpdateCustomerInputDTO;
+        input.id = id;
+        const output:UpdateCustomerOutputDTO = await updateUseCase.execute(input);
+        return output;
+    }
 
-    // async deleteCustomer(queryParams: ParsedQs, response:Response): Promise<any>{
-    //     if(!queryParams.id){
-    //         return response.status(400).json({ Error: 'Missing parameters. Please provide id' });
-    //     }
-    //     try {
-    //         const result = await this.repository.deleteCustomer(Number(queryParams.id));
-    //         if(result?.affectedRows > 0){
-    //             response.status(200).json({Success:`Row with Id ${queryParams.id} deleted`});
-    //         } else {
-    //             response.status(200).json({Success:'No rows were deleted.'});
-    //         }
-    //     } catch (error:any) {
-    //         console.log('Error delete customer',error);
-    //         return response.status(400).json({ Error: error.message });
-    //     }
-    // }
+    static async deleteCustomer(id:number):Promise<any>{
+        const deleteUseCase = new DeleteCustomer(new MySQLCustomerRepository());
+        const input:DeleteCustomerInputDTO = {id};
+        const output:DeleteCustomerOutputDTO = await deleteUseCase.execute(input);
+        return output;        
+    }
 }

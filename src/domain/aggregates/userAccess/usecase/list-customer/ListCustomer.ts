@@ -1,6 +1,6 @@
 import UseCaseInterface from "../../../../sharedKernel/usecase/UseCaseInterface";
 import ICustomerRepository from "../../core/ports/ICustomerRepository";
-import { CustomerOutputDTO, resultClientDto } from "./ListCustomerDTO";
+import { ListCustomerInputDTO, ListCustomerOutputDTO, customerInfo } from "./ListCustomerDTO";
 
 export default class ListCustomer implements UseCaseInterface{
     private readonly repository : ICustomerRepository;
@@ -9,41 +9,39 @@ export default class ListCustomer implements UseCaseInterface{
         this.repository = repository;
     }
 
-    async execute(input?: any): Promise<CustomerOutputDTO> {
+    async execute(input: ListCustomerInputDTO): Promise<ListCustomerOutputDTO> {
         try {
             let result;
             if(input.params.id){
                 result = await this.repository.getCustomerById(Number(input.params.id));
-            }
-            else if(input.params.cpf){
+            } else if(input.params.cpf){
                 result = await this.repository.getCustomerByCPF(Number(input.params.cpf));
             } else {
                 result = await this.repository.getCustomers();
             }
-            let output:CustomerOutputDTO = this.transformToOutput(result);
+            const output:ListCustomerOutputDTO = this.transformToOutput(result);
             return output;           
         } catch (error:any) {
-            console.log('Error in query Database', error);
             const output = {
                 hasError: true,
-                message: error
+                message: 'Failed to get customers informations'
             }
             return output;
         }
     }
 
-    private transformToOutput(result:any): CustomerOutputDTO{
-        let output:CustomerOutputDTO = {
+    private transformToOutput(result:any): ListCustomerOutputDTO{
+        let output:ListCustomerOutputDTO = {
             hasError: false,
             result: []
         }
         result.forEach((element:any) => {
-            let client : resultClientDto = {
+            let client : customerInfo = {
                 id: element.id,
-                cpf: element.customer_cpf,
-                name: element.customer_name,
-                email: element.customer_email,
-                isActive: element.is_active,
+                cpf: element.cpf.value,
+                name: element.name,
+                email: element.email.value,
+                isActive: element.isActive,
             }
             output.result?.push(client);
         });

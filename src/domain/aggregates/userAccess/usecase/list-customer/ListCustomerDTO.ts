@@ -1,17 +1,17 @@
-export interface CustomerInputDTO{
+export interface ListCustomerInputDTO{
     params: {
         id?: number;
         cpf?: string;
     }
 }
 
-export interface CustomerOutputDTO{
+export interface ListCustomerOutputDTO{
     hasError: boolean;
     message?: string;
-    result?: resultClientDto[]; 
+    result?: customerInfo[]; 
 }
 
-export type resultClientDto = {
+export type customerInfo = {
     id: number;
     cpf: string;
     name: string;
