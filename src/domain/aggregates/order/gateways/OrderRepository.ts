@@ -1,7 +1,8 @@
-import mysql from "mysql";
+import mysql, { OkPacket } from "mysql";
 import * as dotenv from "dotenv";
 import { OrderGatewayInterface } from "../interfaces/gateways/OrderGatewayInterface";
 import MySqlOrderQueueRepository from "../../orderQueue/infrastructure/MySqlOrderQueueRepository";
+import { IOrderItem } from "../interfaces/IOrderItem";
 
 export class MySQLOrderRepository implements OrderGatewayInterface {
 	private connection: mysql.Connection;
@@ -58,7 +59,7 @@ export class MySQLOrderRepository implements OrderGatewayInterface {
 		return await this.commitDB(myQuery, values);
 	}
 
-	private async commitDB(query: string, values: any[]) {
+	private async commitDB(query: string, values: any[]): Promise<OkPacket> {
 		return new Promise((resolve, reject) => {
 			this.connection.query(query, values, (error, results) => {
 				if (error) {
@@ -69,23 +70,29 @@ export class MySQLOrderRepository implements OrderGatewayInterface {
 		});
 	}
 
-	async newOrder(customerId: number, total: number) {
+	async newOrder(customerId: number, total: number): Promise<number | void> {
 		try {
 			const insertQuery =
 				"INSERT INTO orders (order_date, order_total, customer_id) VALUES (NOW(), ?, ?)";
 			const values = [total, customerId];
-			const result: any = await this.commitDB(insertQuery, values);
-			return result?.insertId;
+			const result = await this.commitDB(insertQuery, values);
+
+			return result.insertId;
 		} catch (err) {
 			console.log("Error inserting a new Order", err);
 		}
 	}
 
-	async insertOrderItems(items: any) {
+	async insertOrderItems(orderItems: IOrderItem[]): Promise<void> {
 		try {
 			const insertItemsQuery =
 				"INSERT INTO order_item (order_id, item_id, order_item_qtd) VALUES ?";
-			await this.commitDB(insertItemsQuery, [items]);
+			const formattedItems = orderItems.map((item) => [
+				item.order_id,
+				item.item_id,
+				item.order_item_qtd,
+			]);
+			await this.commitDB(insertItemsQuery, [formattedItems]);
 		} catch (err) {
 			console.log("Error inserting Order Items", err);
 		}
