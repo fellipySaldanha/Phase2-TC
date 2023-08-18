@@ -14,6 +14,8 @@ import { NewOrderUseCase } from "../usecases/newOrder/NewOrder";
 
 // Entities
 import { OrderEntity } from "../entities/OrderEntity";
+import { PaymentRepository } from "../../payment/gateways/PaymentRepository";
+import { MercadoPago } from "../../payment/services/MercadoPago";
 
 export class OrderController {
 	static async getOrders(searchId?: number): Promise<ListOrderOutputDTO> {
@@ -26,6 +28,11 @@ export class OrderController {
 
 	static async newOrder(body: NewOrderInputDTO): Promise<OrderEntity | null> {
 		const orderGateway = new MySQLOrderRepository();
-		return await NewOrderUseCase.execute(body, orderGateway);
+		const paymentGateway = new PaymentRepository();
+		return await NewOrderUseCase.execute(
+			body,
+			orderGateway,
+			paymentGateway
+		);
 	}
 }
