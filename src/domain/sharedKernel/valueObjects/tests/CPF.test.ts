@@ -1,19 +1,19 @@
-import CPF from "../CPF";
+import CPF from '../CPF';
 
-describe("CPF", () => {
-  test("should validate a valid CPF with only number", () => {
-    const cpf = new CPF("12345678909");
+describe('CPF', () => {
+  test('should validate a valid CPF with only number', () => {
+    const cpf = new CPF('12345678909');
     expect(cpf.validate(cpf.value)).toBe(true);
   });
 
-  test("should validate a valid formatted CPF", () => {
-    const cpf = new CPF("123.456.789-09");
+  test('should validate a valid formatted CPF', () => {
+    const cpf = new CPF('123.456.789-09');
     expect(cpf.validate(cpf.value)).toBe(true);
   });
 
-  test("should throw an error for an invalid CPF", () => {
+  test('should throw an error for an invalid CPF', () => {
     expect(() => {
-      new CPF("00000000000");
-    }).toThrowError("invalid CPF");
+      new CPF('00000000000');
+    }).toThrowError('invalid CPF');
   });
 });

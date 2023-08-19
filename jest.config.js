@@ -3,5 +3,7 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  modulePaths: ['/Volumes/ExternalHD/Documents EHD/FIAP/Tech-Challenge/tech-challenge/src'],
+  modulePaths: [
+    '/Volumes/ExternalHD/Documents EHD/FIAP/Tech-Challenge/tech-challenge/src',
+  ],
 };
