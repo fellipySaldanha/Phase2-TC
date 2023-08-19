@@ -7,6 +7,7 @@ export default class Customer {
   name: string;
   cpf: CPF;
   isActive: boolean;
+  private UNAMED_USER: number = 1;
 
   constructor(
     name: string,
@@ -20,5 +21,25 @@ export default class Customer {
     this.name = name;
     this.cpf = cpf;
     this.isActive = isActive;
+    this.validate();
+  }
+
+  private validate() {
+    let errors: string[] = [];
+    if (this.id == this.UNAMED_USER) {
+      return;
+    }
+    if (!this.cpf.value) {
+      errors.push('CPF is required');
+    }
+    if (!this.email.value) {
+      errors.push('Email is required');
+    }
+    if (!this.name) {
+      errors.push('Name is required');
+    }
+    if (errors.length > 0) {
+      throw errors;
+    }
   }
 }
