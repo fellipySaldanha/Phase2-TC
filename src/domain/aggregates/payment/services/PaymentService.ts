@@ -1,4 +1,3 @@
-import Order from '../../order/core/entities/Order';
 import IPayments from '../core/ports/IPayments';
 
 export default class PaymentService {

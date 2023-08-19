@@ -1,143 +1,46 @@
-import { Request, Response } from 'express';
-import HttpServer from '../../../../application/ports/HttpServer';
-import ICustomerRepository from '../core/ports/ICustomerRepository';
-import { ParsedQs } from 'qs';
-import CustomerDTO from '../dto/CustomerDTO';
-import Email from '../../../sharedKernel/valueObjects/Email';
-import CPF from '../../../sharedKernel/valueObjects/CPF';
+import ListCustomer from "../usecase/list-customer/ListCustomer";
+import MySQLCustomerRepository from "../infrastructure/MySQLCustomerRepository";
+import { ListCustomerInputDTO, ListCustomerOutputDTO } from "../usecase/list-customer/ListCustomerDTO";
+import CreateCustomer from "../usecase/create-customer/CreateCustomer";
+import { CreateCustomerInputDTO, CreateCustomerOutputDTO } from "../usecase/create-customer/CreateCustomerDTO";
+import { DeleteCustomerInputDTO, DeleteCustomerOutputDTO } from "../usecase/delete-customer/DeleteCustomerDTO";
+import DeleteCustomer from "../usecase/delete-customer/DeleteCustomer";
+import UpdateCustomer from "../usecase/update-customer/UpdateCustomer";
+import { UpdateCustomerInputDTO, UpdateCustomerOutputDTO } from '../usecase/update-customer/UpdateCustomerDTO';
 
-export default class CustomerController {
-  private readonly httpServer: HttpServer;
-  private readonly repository: ICustomerRepository;
+export default class CustomerController{
 
-  constructor(httpServer: HttpServer, repository: ICustomerRepository) {
-    this.repository = repository;
-    this.httpServer = httpServer;
-    this.routes();
-  }
-
-  async routes() {
-    this.httpServer.register(
-      'get',
-      '/customer',
-      async (req: Request, resp: Response) => {
-        return await this.getCustomers(req.query, resp);
-      },
-    );
-    this.httpServer.register(
-      'post',
-      '/customer',
-      async (req: Request, resp: Response) => {
-        return await this.createCustomer(req.body, resp);
-      },
-    );
-    this.httpServer.register(
-      'patch',
-      '/customer',
-      async (req: Request, resp: Response) => {
-        return await this.updateCustomer(req.query, req.body, resp);
-      },
-    );
-    this.httpServer.register(
-      'delete',
-      '/customer',
-      async (req: Request, resp: Response) => {
-        return await this.deleteCustomer(req.query, resp);
-      },
-    );
-  }
-
-  async getCustomers(queryParams: ParsedQs, response: Response): Promise<any> {
-    try {
-      if (queryParams.id) {
-        const result = await this.repository.getCustomerById(
-          Number(queryParams.id),
-        );
-        return response.status(200).json(result);
-      }
-      if (queryParams.cpf) {
-        const result = await this.repository.getCustomerByCPF(
-          Number(queryParams.cpf),
-        );
-        return response.status(200).json(result);
-      }
-      const result = await this.repository.getCustomers();
-      return response.status(200).json(result);
-    } catch (error: any) {
-      console.log('Error in query Database', error);
-      return response.status(400).json({ Error: error.message });
+    static async getCustomers(searchId?:number, searchCPF?:string): Promise<any>{
+        const listUseCase:ListCustomer = new ListCustomer(new MySQLCustomerRepository());
+            const input: ListCustomerInputDTO = {
+            params:{
+                id:searchId,
+                cpf:searchCPF
+            }
+        }
+        const output: ListCustomerOutputDTO = await listUseCase.execute(input);
+        return output;
     }
-  }
 
-  async createCustomer(body: string, response: Response): Promise<any> {
-    try {
-      const parsedJson: CustomerDTO = body as unknown as CustomerDTO;
-      const cpf = new CPF(parsedJson.cpf);
-      const email = new Email(parsedJson.email);
-      const result = await this.repository.createCustomer(
-        parsedJson.name,
-        email.getEmail(),
-        cpf.getCPF(),
-        parsedJson.isActive,
-      );
-      return response.status(200).json(result);
-    } catch (error: any) {
-      console.log('Error create customer', error);
-      return response.status(400).json({ Error: error.message });
+    static async createCustomer(body:string): Promise<any>{
+        const createUseCase:CreateCustomer = new CreateCustomer(new MySQLCustomerRepository());
+        const input: CreateCustomerInputDTO = body as unknown as CreateCustomerInputDTO;
+        const output:CreateCustomerOutputDTO = await createUseCase.execute(input);
+        return output;
     }
-  }
 
-  async updateCustomer(
-    queryParams: ParsedQs,
-    body: string,
-    response: Response,
-  ): Promise<any> {
-    try {
-      const parsedJson: CustomerDTO = body as unknown as CustomerDTO;
-      const cpf = new CPF(parsedJson.cpf);
-      const email = new Email(parsedJson.email);
-      if (!queryParams.id) {
-        return response
-          .status(400)
-          .json({ Error: 'Missing parameters. Please provide id' });
-      }
-      const result = await this.repository.updateCustomer(
-        Number(queryParams.id),
-        parsedJson.name,
-        email.getEmail(),
-        cpf.getCPF(),
-        parsedJson.isActive,
-      );
-      return response.status(200).json(result);
-    } catch (error: any) {
-      console.log('Error update customer', error);
-      return response.status(400).json({ Error: error.message });
+    static async updateCustomer(body:string, id:number):Promise<UpdateCustomerOutputDTO>{
+        const updateUseCase = new UpdateCustomer(new MySQLCustomerRepository());
+        let input:UpdateCustomerInputDTO = body as unknown as UpdateCustomerInputDTO;
+        input.id = id;
+        const output:UpdateCustomerOutputDTO = await updateUseCase.execute(input);
+        return output;
     }
-  }
 
-  async deleteCustomer(
-    queryParams: ParsedQs,
-    response: Response,
-  ): Promise<any> {
-    if (!queryParams.id) {
-      return response
-        .status(400)
-        .json({ Error: 'Missing parameters. Please provide id' });
+    static async deleteCustomer(id:number):Promise<any>{
+        const deleteUseCase = new DeleteCustomer(new MySQLCustomerRepository());
+        const input:DeleteCustomerInputDTO = {id};
+        const output:DeleteCustomerOutputDTO = await deleteUseCase.execute(input);
+        return output;        
     }
-    try {
-      const result = await this.repository.deleteCustomer(
-        Number(queryParams.id),
-      );
-      if (result?.affectedRows > 0) {
-        response
-          .status(200)
-          .json({ Success: `Row with Id ${queryParams.id} deleted` });
-      } else {
-        response.status(200).json({ Success: 'No rows were deleted.' });
-      }
-    } catch (error: any) {
-      console.log('Error delete customer', error);
-      return response.status(400).json({ Error: error.message });
-    }
-  }
 }
