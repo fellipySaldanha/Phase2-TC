@@ -1,24 +1,24 @@
-import ListCustomer from '../usecase/list-customer/ListCustomer';
-import MySQLCustomerRepository from '../infrastructure/MySQLCustomerRepository';
+import ListCustomer from '../usecases/listCustomer/ListCustomer';
+import MySQLCustomerRepository from '../gateways/MySQLCustomerRepository';
 import {
   ListCustomerInputDTO,
   ListCustomerOutputDTO,
-} from '../usecase/list-customer/ListCustomerDTO';
-import CreateCustomer from '../usecase/create-customer/CreateCustomer';
+} from '../usecases/listCustomer/ListCustomerDTO';
+import CreateCustomer from '../usecases/createCustomer/CreateCustomer';
 import {
   CreateCustomerInputDTO,
   CreateCustomerOutputDTO,
-} from '../usecase/create-customer/CreateCustomerDTO';
+} from '../usecases/createCustomer/CreateCustomerDTO';
 import {
   DeleteCustomerInputDTO,
   DeleteCustomerOutputDTO,
-} from '../usecase/delete-customer/DeleteCustomerDTO';
-import DeleteCustomer from '../usecase/delete-customer/DeleteCustomer';
-import UpdateCustomer from '../usecase/update-customer/UpdateCustomer';
+} from '../usecases/deleteCustomer/DeleteCustomerDTO';
+import DeleteCustomer from '../usecases/deleteCustomer/DeleteCustomer';
+import UpdateCustomer from '../usecases/updateCustomer/UpdateCustomer';
 import {
   UpdateCustomerInputDTO,
   UpdateCustomerOutputDTO,
-} from '../usecase/update-customer/UpdateCustomerDTO';
+} from '../usecases/updateCustomer/UpdateCustomerDTO';
 
 export default class CustomerController {
   static async getCustomers(

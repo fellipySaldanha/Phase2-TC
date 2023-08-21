@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import CustomerController from '../../domain/aggregates/userAccess/application/CustomerController';
-import { ListCustomerOutputDTO } from '../../domain/aggregates/userAccess/usecase/list-customer/ListCustomerDTO';
+import CustomerController from '../../domain/aggregates/userAccess/controllers/CustomerController';
+import { ListCustomerOutputDTO } from '../../domain/aggregates/userAccess/usecases/listCustomer/ListCustomerDTO';
 import HttpServer from '../../application/ports/HttpServer';
-import { CreateCustomerOutputDTO } from '../../domain/aggregates/userAccess/usecase/create-customer/CreateCustomerDTO';
-import { DeleteCustomerOutputDTO } from '../../domain/aggregates/userAccess/usecase/delete-customer/DeleteCustomerDTO';
-import { UpdateCustomerOutputDTO } from '../../domain/aggregates/userAccess/usecase/update-customer/UpdateCustomerDTO';
+import { CreateCustomerOutputDTO } from '../../domain/aggregates/userAccess/usecases/createCustomer/CreateCustomerDTO';
+import { DeleteCustomerOutputDTO } from '../../domain/aggregates/userAccess/usecases/deleteCustomer/DeleteCustomerDTO';
+import { UpdateCustomerOutputDTO } from '../../domain/aggregates/userAccess/usecases/updateCustomer/UpdateCustomerDTO';
 
 export default class CustomerRoute {
   private readonly httpServer: HttpServer;
