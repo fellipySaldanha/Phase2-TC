@@ -1,54 +1,88 @@
-import { NewOrderInputDTO } from "./NewOrderDTO";
-import { OrderGatewayInterface } from "../../interfaces/gateways/OrderGatewayInterface";
+// DTOs
+import { NewOrderInputDTO } from './NewOrderDTO';
+
+// Interfaces
+import { IOrderItem } from '../../interfaces/IOrderItem';
+
+// Gateways
+import { OrderGatewayInterface } from '../../interfaces/gateways/OrderGatewayInterface';
+import { PaymentGatewayInterface } from '../../../payment/interfaces/gateways/PaymentGatewayInterface';
+
+// Entities
+import { OrderEntity } from '../../entities/OrderEntity';
+import { OrderItemEntity } from '../../entities/OrderItemEntity';
 
 export class NewOrderUseCase {
-	static async execute(
-		body: NewOrderInputDTO,
-		OrderGateway: OrderGatewayInterface
-	): Promise<number | null> {
-		try {
-			const { order_total, customer_id } = body;
-			const total = order_total;
-			var customerId = customer_id;
+  static async execute(
+    body: NewOrderInputDTO,
+    OrderGateway: OrderGatewayInterface,
+    paymentGateway: PaymentGatewayInterface,
+  ): Promise<OrderEntity | null> {
+    try {
+      const { order_total, customer_id, order_items } = body;
 
-			OrderGateway.beginTransaction();
+      OrderGateway.beginTransaction();
 
-			//insert order
-			if (!customerId) {
-				customerId = 1; //Customer Default
-			}
-			const order_id = await OrderGateway.newOrder(customerId, total);
+      const order_id = await OrderGateway.newOrder(
+        customer_id || 1,
+        order_total,
+      );
+      if (!order_id) return null;
 
-			//Simulate the payment process
-			// TO-DO: Verificar como vai ficar essa parte
-			// if (!this.service.payOrder(order_id, total)) {
-			// 	this.repository.rollback();
-			// 	return response.status(400).json({
-			// 		Error: "Unable to proceed with the order payment! Please, try again later",
-			// 	});
-			// }
+      //Simulate the payment process
+      if (!paymentGateway.makePayment(order_id, order_total)) {
+        OrderGateway.rollback();
+        throw new Error(
+          'Unable to proceed with the order payment! Please, try again later',
+        );
+      }
 
-			//insert order_items
-			let queryParams = [];
-			for (let i in body.order_items) {
-				const item_id = body.order_items[i].item_id;
-				const order_item_qtd = body.order_items[i].order_item_qtd;
+      //insert order_items
+      const formated_order_items = NewOrderUseCase.formatOrderItems(
+        order_id,
+        order_items,
+      );
+      await OrderGateway.insertOrderItems(formated_order_items);
 
-				let param = [order_id, item_id, order_item_qtd];
-				queryParams.push(param);
-			}
+      //adding order into the order_queue
+      await OrderGateway.addOrderQueue(order_id);
 
-			await OrderGateway.insertOrderItems(queryParams);
+      OrderGateway.commit();
+      return new OrderEntity(
+        order_id,
+        new Date(),
+        order_total,
+        customer_id,
+        formated_order_items,
+      );
+    } catch (error) {
+      console.log('Error update customer', error);
+      OrderGateway.rollback();
+      return null;
+    }
+  }
 
-			//adding order into the order_queue
-			const result = await OrderGateway.addOrderQueue(order_id);
+  static formatOrderItems(
+    order_id: number,
+    order_items: IOrderItem[],
+  ): IOrderItem[] {
+    let queryParams: IOrderItem[] = [];
+    for (let i in order_items) {
+      const { item_id, order_item_qtd } = order_items[i];
 
-			OrderGateway.commit();
-			return result;
-		} catch (error) {
-			console.log("Error update customer", error);
-			OrderGateway.rollback();
-			return null;
-		}
-	}
+      const orderItemEntity = new OrderItemEntity(
+        order_id,
+        item_id,
+        order_item_qtd,
+      );
+
+      queryParams.push({
+        order_id: orderItemEntity.order_id,
+        item_id: orderItemEntity.item_id,
+        order_item_qtd: orderItemEntity.order_item_qtd,
+      });
+    }
+
+    return queryParams;
+  }
 }

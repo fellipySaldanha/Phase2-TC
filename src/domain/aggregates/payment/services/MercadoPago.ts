@@ -1,6 +1,6 @@
-import IPayments from '../core/ports/IPayments';
+import { PaymentGatewayInterface } from '../interfaces/gateways/PaymentGatewayInterface';
 
-export default class MercadoPago implements IPayments {
+export class MercadoPago implements PaymentGatewayInterface {
   constructor() {
     /////////////////////////////////////////
     //

@@ -1,3 +1,3 @@
-export default interface IPayments {
+export interface PaymentGatewayInterface {
   makePayment(orderId: number, orderValue: number): boolean;
 }
