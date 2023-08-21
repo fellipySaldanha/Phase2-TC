@@ -21,9 +21,7 @@ export default class UpdateCustomer implements UseCaseInterface {
       if (validateParams) {
         return validateParams;
       }
-      console.log('validateBody', validateBody);
       if (validateBody) {
-        console.log('@@@@');
         return validateBody;
       }
       const result = await this.repository.updateCustomer(
@@ -52,7 +50,6 @@ export default class UpdateCustomer implements UseCaseInterface {
   private validateBodyRequest(
     input: UpdateCustomerInputDTO,
   ): UpdateCustomerOutputDTO | undefined {
-    console.log('INPUT', input);
     if (Object.keys(input).length === 1 && input['id']) {
       return {
         hasError: true,
