@@ -1,13 +1,13 @@
-import ExpressAdapter from "./application/adapters/ExpressAdapter";
-import * as dotenv from "dotenv";
+import ExpressAdapter from './application/adapters/ExpressAdapter';
+import * as dotenv from 'dotenv';
 
-import ProductController from "./domain/aggregates/productMaintenance/application/ProductController";
-import MySqlProductRepository from "./domain/aggregates/productMaintenance/infrastructure/MySqlProductRepository";
-import MySQLCustomerRepository from "./domain/aggregates/userAccess/infrastructure/MySQLCustomerRepository";
-import OrderQueueController from "./domain/aggregates/orderQueue/application/OrderQueueController";
-import MySqlOrderQueueRepository from "./domain/aggregates/orderQueue/infrastructure/MySqlOrderQueueRepository";
-import CustomerRoute from "./infrastructure/api/customer.route";
-import OrderRoute from "./infrastructure/api/order.route";
+import ProductController from './domain/aggregates/productMaintenance/application/ProductController';
+import MySqlProductRepository from './domain/aggregates/productMaintenance/infrastructure/MySqlProductRepository';
+import MySQLCustomerRepository from './domain/aggregates/userAccess/gateways/MySQLCustomerRepository';
+import OrderQueueController from './domain/aggregates/orderQueue/application/OrderQueueController';
+import MySqlOrderQueueRepository from './domain/aggregates/orderQueue/infrastructure/MySqlOrderQueueRepository';
+import CustomerRoute from './infrastructure/api/customer.route';
+import OrderRoute from './infrastructure/api/order.route';
 
 dotenv.config();
 
@@ -21,8 +21,8 @@ const customerRoute = new CustomerRoute(server);
 const productController = new ProductController(server, database_product);
 const orderRoute = new OrderRoute(server);
 const orderQueueController = new OrderQueueController(
-	server,
-	databaseOrderQueue
+  server,
+  databaseOrderQueue,
 );
 
 server.router(CustomerRoute);

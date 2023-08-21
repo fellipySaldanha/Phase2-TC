@@ -1,8 +1,8 @@
 export interface DeleteCustomerInputDTO {
-    id:number;
+  id: number;
 }
 
 export interface DeleteCustomerOutputDTO {
-    hasError:boolean;
-    message:string;
+  hasError: boolean;
+  message: string;
 }
