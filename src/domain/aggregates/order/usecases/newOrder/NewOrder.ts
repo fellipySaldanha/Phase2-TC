@@ -6,17 +6,17 @@ import { IOrderItem } from '../../interfaces/IOrderItem';
 
 // Gateways
 import { OrderGatewayInterface } from '../../interfaces/gateways/OrderGatewayInterface';
-import { PaymentGatewayInterface } from '../../../payment/interfaces/gateways/PaymentGatewayInterface';
 
 // Entities
 import { OrderEntity } from '../../entities/OrderEntity';
 import { OrderItemEntity } from '../../entities/OrderItemEntity';
+import PaymentProviderInterface from '../../../payment/interfaces/PaymentProviderInterface';
 
 export class NewOrderUseCase {
   static async execute(
     body: NewOrderInputDTO,
     OrderGateway: OrderGatewayInterface,
-    paymentGateway: PaymentGatewayInterface,
+    paymentGateway: PaymentProviderInterface,
   ): Promise<OrderEntity | null> {
     try {
       const { order_total, customer_id, order_items } = body;
