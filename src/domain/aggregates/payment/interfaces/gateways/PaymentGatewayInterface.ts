@@ -1,3 +1,3 @@
 export interface PaymentGatewayInterface {
-	makePayment(orderId: number, orderValue: number): boolean;
+  makePayment(orderId: number, orderValue: number): boolean;
 }

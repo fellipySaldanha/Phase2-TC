@@ -1,10 +1,10 @@
-import UseCaseInterface from '../../../sharedKernel/usecase/UseCaseInterface';
-import ICustomerRepository from '../core/ports/ICustomerRepository';
+import UseCaseInterface from '../../../../sharedKernel/usecase/UseCaseInterface';
+import ICustomerRepository from '../../core/ports/ICustomerRepository';
 import {
   ListCustomerInputDTO,
   ListCustomerOutputDTO,
   customerInfo,
-} from '../usecase/list-customer/ListCustomerDTO';
+} from './ListCustomerDTO';
 
 export default class ListCustomer implements UseCaseInterface {
   private readonly repository: ICustomerRepository;

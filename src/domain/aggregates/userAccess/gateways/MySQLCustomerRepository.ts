@@ -23,11 +23,22 @@ export default class MySQLCustomerRepository implements ICustomerRepository {
     cpf: string,
     active: boolean,
   ): Promise<Customer[]> {
+    let customers: Customer[] = [];
+    let customer: Customer = new Customer(
+      name,
+      new Email(email),
+      new CPF(cpf),
+      active,
+    );
     const insertQuery =
       'INSERT INTO customers (customer_name, customer_email, customer_cpf, is_active) VALUES (?, ?, ?, ?)';
     const values = [name, email, cpf, active];
     const result: any = await this.commitDB(insertQuery, values);
-    return await this.getCustomerById(result?.insertId);
+    if (Object.keys(result).length !== 0) {
+      customer.id = result.insertId;
+      customers.push(customer);
+    }
+    return customers;
   }
 
   async getCustomers(): Promise<Customer[]> {
@@ -57,7 +68,6 @@ export default class MySQLCustomerRepository implements ICustomerRepository {
     const selectQuery = `SELECT * FROM customers WHERE id = ?`;
     const values = [id];
     let result: any = await this.commitDB(selectQuery, values);
-    console.log('@@@RESULT', result);
     let customers: Customer[] = [];
     if (Object.keys(result).length !== 0) {
       let customer: Customer = new Customer(
@@ -88,12 +98,6 @@ export default class MySQLCustomerRepository implements ICustomerRepository {
     return customers;
   }
 
-  async getCustomerByCPF(cpf: number): Promise<any> {
-    const selectQuery = `SELECT * FROM customers WHERE customer_cpf = ?`;
-    const values = [cpf];
-    return await this.commitDB(selectQuery, values);
-  }
-
   async updateCustomer(
     id: number,
     name: string,
@@ -107,8 +111,15 @@ export default class MySQLCustomerRepository implements ICustomerRepository {
                 WHERE id = ?
             `;
     const values = [name, email, cpf, active, id];
+    const customer: Customer = new Customer(
+      name,
+      new Email(email),
+      new CPF(cpf),
+      active,
+      id,
+    );
     const result: any = await this.commitDB(updateQuery, values);
-    if (result?.affectedRows > 0) {
+    if (result?.affectedRows > 0 && customer) {
       return `Row with Id ${id} updated`;
     } else {
       return 'No rows were updated.';
@@ -129,7 +140,6 @@ export default class MySQLCustomerRepository implements ICustomerRepository {
   private async commitDB(query: string, values: any[], id?: number) {
     return new Promise((resolve, reject) => {
       this.connection.query(query, values, (error, results) => {
-        console.log('@@@@ RESULTS COMMITDB', results);
         if (error) {
           reject(error);
         }
