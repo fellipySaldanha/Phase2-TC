@@ -1,4 +1,4 @@
-export default interface IOrderQueueRepository {
+export default interface IOrderQueueGateway {
   getOrderQueue(orderId?: number): any;
   getOrderQueueStatus(orderId: number): any;
   updateOrderQueue(

@@ -13,7 +13,7 @@ import { ListOrderUseCase } from '../usecases/listOrder/ListOrder';
 import { NewOrderUseCase } from '../usecases/newOrder/NewOrder';
 
 // Entities
-import { OrderEntity } from '../entities/OrderEntity';
+import { OrderEntity } from '../core/entities/OrderEntity';
 import { PaymentRepository } from '../../payment/gateways/PaymentRepository';
 import { MercadoPago } from '../../payment/services/MercadoPago';
 

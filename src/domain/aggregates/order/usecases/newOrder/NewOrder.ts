@@ -9,8 +9,8 @@ import { OrderGatewayInterface } from '../../interfaces/gateways/OrderGatewayInt
 import { PaymentGatewayInterface } from '../../../payment/interfaces/gateways/PaymentGatewayInterface';
 
 // Entities
-import { OrderEntity } from '../../entities/OrderEntity';
-import { OrderItemEntity } from '../../entities/OrderItemEntity';
+import { OrderEntity } from '../../core/entities/OrderEntity';
+import { OrderItemEntity } from '../../core/entities/OrderItemEntity';
 
 export class NewOrderUseCase {
   static async execute(
