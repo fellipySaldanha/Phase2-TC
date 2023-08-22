@@ -1,13 +1,16 @@
 import ExpressAdapter from './application/adapters/ExpressAdapter';
 import * as dotenv from 'dotenv';
 
-import ProductController from './domain/aggregates/productMaintenance/application/ProductController';
-import MySqlProductRepository from './domain/aggregates/productMaintenance/infrastructure/MySqlProductRepository';
+
+import MySqlProductRepository from './domain/aggregates/productMaintenance/gateways/MySqlProductRepository';
 import MySQLCustomerRepository from './domain/aggregates/userAccess/gateways/MySQLCustomerRepository';
 import OrderQueueController from './domain/aggregates/orderQueue/application/OrderQueueController';
 import MySqlOrderQueueRepository from './domain/aggregates/orderQueue/infrastructure/MySqlOrderQueueRepository';
 import CustomerRoute from './infrastructure/api/customer.route';
 import OrderRoute from './infrastructure/api/order.route';
+import ProductRoute from './infrastructure/api/product.route';
+
+
 
 dotenv.config();
 
@@ -18,7 +21,7 @@ const database_product = new MySqlProductRepository();
 const databaseOrderQueue = new MySqlOrderQueueRepository();
 
 const customerRoute = new CustomerRoute(server);
-const productController = new ProductController(server, database_product);
+const productRoute = new ProductRoute(server);
 const orderRoute = new OrderRoute(server);
 const orderQueueController = new OrderQueueController(
   server,
@@ -26,7 +29,7 @@ const orderQueueController = new OrderQueueController(
 );
 
 server.router(CustomerRoute);
-server.router(ProductController);
+server.router(ProductRoute);
 server.router(OrderQueueController);
 
 server.listen(3000);
