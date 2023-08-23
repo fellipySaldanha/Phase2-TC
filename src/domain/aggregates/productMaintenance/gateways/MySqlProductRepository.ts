@@ -1,6 +1,7 @@
 const util = require('util');
 import mysql from 'mysql';
 import IProductRepository from '../core/ports/IProductRepository';
+import Product from '../core/entities/Product';
 
 export default class MySqlProductRepository implements IProductRepository {
   private client: any;
@@ -31,7 +32,7 @@ export default class MySqlProductRepository implements IProductRepository {
 
       return results;
     } catch (err) {
-      console.error('Erro ao se conectar com o banco de dados:', err);
+      console.error('Erro to connect with the database:', err);
     }
   }
 
@@ -52,7 +53,7 @@ export default class MySqlProductRepository implements IProductRepository {
 
       return results;
     } catch (err) {
-      console.error('Erro ao se conectar com o banco de dados:', err);
+      console.error('Erro to connect with the database:', err);
     }
   }
   async getProductByCategory(itemId: number): Promise<any> {
@@ -70,7 +71,7 @@ export default class MySqlProductRepository implements IProductRepository {
 
       return results;
     } catch (err) {
-      console.error('Erro ao se conectar com o banco de dados:', err);
+      console.error('Erro to connect with the database:', err);
     }
   }
   async createProduct(
@@ -80,6 +81,13 @@ export default class MySqlProductRepository implements IProductRepository {
     itemDescription: string,
     itemImgUrl: string,
   ): Promise<any> {
+    let product: Product = new Product(
+      itemName,
+      itemPrice,
+      itemType,
+      itemDescription,
+      itemImgUrl,
+    );
     const queryPromise = util
       .promisify(this.connection.query)
       .bind(this.connection);
@@ -99,7 +107,7 @@ export default class MySqlProductRepository implements IProductRepository {
 
       return results;
     } catch (err) {
-      console.error('Erro ao se conectar com o banco de dados:', err);
+      console.error('Erro to connect with the database:', err);
     }
   }
 
@@ -111,6 +119,14 @@ export default class MySqlProductRepository implements IProductRepository {
     itemDescription: string,
     itemImgUrl: string,
   ): Promise<any> {
+    let product: Product = new Product(
+      itemName,
+      itemPrice,
+      itemType,
+      itemDescription,
+      itemImgUrl,
+      itemId,
+    );
     const queryPromise = util
       .promisify(this.connection.query)
       .bind(this.connection);
@@ -128,7 +144,7 @@ export default class MySqlProductRepository implements IProductRepository {
 
       return await this.commitDB(query, queryParams, itemId);
     } catch (err) {
-      console.error('Erro ao se conectar com o banco de dados:', err);
+      console.error('Erro to connect with the database:', err);
     }
   }
 

@@ -11,4 +11,5 @@ export interface CreateProductOutputDTO {
   hasError: boolean;
   message?: string;
   result?: CreateProductInputDTO[];
+  array_errors?: string[];
 }

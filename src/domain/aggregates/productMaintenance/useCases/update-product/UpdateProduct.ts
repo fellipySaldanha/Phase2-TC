@@ -14,7 +14,7 @@ export default class UpdateProduct implements UseCaseInterface {
 
   async execute(input: UpdateProductInputDTO): Promise<UpdateProductOutputDTO> {
     try {
-      const errors: string[] = this.validateFields(input);
+      const errors: string[] = this.validateRequest(input);
       if (errors?.length > 0) {
         return {
           hasError: true,
@@ -36,28 +36,24 @@ export default class UpdateProduct implements UseCaseInterface {
       };
 
       return output;
-    } catch {
+    } catch (error: any) {
       const output: UpdateProductOutputDTO = {
         hasError: true,
         message: 'Failed to update product',
+        array_errors: error,
       };
       return output;
     }
   }
 
-  private validateFields(input: UpdateProductInputDTO): string[] {
+  private validateRequest(input: UpdateProductInputDTO): string[] {
     let errors: string[] = [];
     if (Object.keys(input).length === 0) {
       errors.push('Missing body.');
       return errors;
-    } else if (!input.itemId) {
+    }
+    if (!input.itemId) {
       errors.push('Missing value: itemId.');
-    } else if (!input.itemName) {
-      errors.push('Missing value: itemName.');
-    } else if (!input.itemPrice) {
-      errors.push('Missing value: itemPrice.');
-    } else if (!input.itemType) {
-      errors.push('Missing value: itemType.');
     }
 
     return errors;

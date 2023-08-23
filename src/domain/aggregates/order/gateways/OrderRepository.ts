@@ -1,7 +1,7 @@
 import mysql, { OkPacket } from 'mysql';
 import * as dotenv from 'dotenv';
 import { OrderGatewayInterface } from '../interfaces/gateways/OrderGatewayInterface';
-import MySqlOrderQueueRepository from '../../orderQueue/infrastructure/MySqlOrderQueueRepository';
+import MySqlOrderQueueRepository from '../../orderQueue/gateways/OrderQueueRepository';
 import { IOrderItem } from '../interfaces/IOrderItem';
 
 export class MySQLOrderRepository implements OrderGatewayInterface {

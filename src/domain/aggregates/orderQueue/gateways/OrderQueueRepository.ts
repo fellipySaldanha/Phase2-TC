@@ -1,13 +1,12 @@
 import mysql from 'mysql';
-import IOrderQueueRepository from '../core/ports/IOrderQueueRepository';
+import IOrderQueueRepository from '../core/ports/IOrderQueueGateway';
 import {
   OrderQueueStatus,
   OrderWaitingTime,
 } from '../core/entities/OrderQueue';
+import IOrderQueueGateway from '../core/ports/IOrderQueueGateway';
 
-export default class MySqlOrderQueueRepository
-  implements IOrderQueueRepository
-{
+export default class MySqlOrderQueueRepository implements IOrderQueueGateway {
   private connection: mysql.Connection;
 
   constructor(conn?: mysql.Connection) {

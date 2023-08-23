@@ -9,4 +9,5 @@ export interface UpdateProductInputDTO {
 export interface UpdateProductOutputDTO {
   hasError: boolean;
   message?: string;
+  array_errors?: string[];
 }
