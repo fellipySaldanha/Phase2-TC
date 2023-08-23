@@ -5,6 +5,7 @@ export interface MoveNextInputDTO {
 export interface MoveNextOutputDTO {
   hasError: boolean;
   message?: string;
+  httpCode?: number;
   result?: orderqueueInfo[];
 }
 

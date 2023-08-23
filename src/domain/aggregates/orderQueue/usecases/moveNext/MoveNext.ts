@@ -24,12 +24,12 @@ export class MoveNextUseCase {
         const output = {
           hasError: true,
           message:
-            'Order not found in the queue. Please, certify that it is a valid number.',
+            'Order not found in the queue. Please, certify that it is a valid Order Number.',
           httpCode: 404,
         };
 
         console.log(
-          'Order not found in the queue. Please, certify that it is a valid number.',
+          'Order not found in the queue. Please, certify that it is a valid Order Number.',
         );
         return output;
       }

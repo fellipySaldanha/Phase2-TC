@@ -4,6 +4,7 @@ import { ListOrderOutputDTO } from '../../domain/aggregates/order/usecases/listO
 
 import HttpServer from '../../application/ports/HttpServer';
 import { GetOrderQueueOutputDTO } from '../../domain/aggregates/orderQueue/usecases/getOrderQueue/GetOrderQueueDTO';
+import { MoveNextOutputDTO } from '../../domain/aggregates/orderQueue/usecases/moveNext/MoveNextDTO';
 
 export default class OrderQueueRoute {
   private readonly httpServer: HttpServer;
@@ -26,7 +27,15 @@ export default class OrderQueueRoute {
         try {
           const output: GetOrderQueueOutputDTO =
             await OrderQueueController.getOrderQueue(Number(req.query.id));
-          return resp.status(200).json(output.result);
+
+          if (output.hasError) {
+            console.log(output.httpCode);
+            return resp
+              .status(!output.httpCode ? 500 : output.httpCode)
+              .json({ Error: output.message });
+          } else {
+            return resp.status(200).json(output.result);
+          }
         } catch (error) {
           return resp.status(400).json({ error });
         }
@@ -45,8 +54,9 @@ export default class OrderQueueRoute {
               .status(400)
               .json({ Error: 'Missing parameters. Please provide id' });
           }
-          const output: GetOrderQueueOutputDTO =
-            await OrderQueueController.moveNext(Number(req.query.id));
+          const output: MoveNextOutputDTO = await OrderQueueController.moveNext(
+            Number(req.query.id),
+          );
 
           if (output.hasError) {
             console.log(output.httpCode);

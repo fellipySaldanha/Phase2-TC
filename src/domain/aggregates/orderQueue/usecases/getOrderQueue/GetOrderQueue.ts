@@ -20,11 +20,28 @@ export class GetOrderQueueUseCase {
         result = await gateway.getOrderQueue();
       }
 
-      output = this.transformToOutput(result);
+      if (result.length == 0) {
+        output = { hasError: false, httpCode: 204 };
+
+        if (params.id) {
+          output = {
+            hasError: true,
+            message:
+              'Order not found. Please, certity that it is a valid Order Number!',
+            httpCode: 404,
+          };
+          console.log(
+            'Order not found. Please, certity that it is a valid Order Number!',
+          );
+        }
+      } else {
+        output = this.transformToOutput(result);
+      }
     } catch (error: any) {
       output = {
         hasError: true,
         message: 'Failed to get order queue information',
+        httpCode: 500,
       };
 
       console.log('Error in query Database', error);
