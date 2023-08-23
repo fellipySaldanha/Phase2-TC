@@ -8,6 +8,7 @@ import MySqlOrderQueueRepository from './domain/aggregates/orderQueue/infrastruc
 import CustomerRoute from './infrastructure/api/customer.route';
 import OrderRoute from './infrastructure/api/order.route';
 import ProductRoute from './infrastructure/api/product.route';
+import { PaymentRoute } from './infrastructure/api/payment.route';
 
 dotenv.config();
 
@@ -24,9 +25,11 @@ const orderQueueController = new OrderQueueController(
   server,
   databaseOrderQueue,
 );
+const paymentRoute = new PaymentRoute(server);
 
 server.router(CustomerRoute);
 server.router(ProductRoute);
 server.router(OrderQueueController);
+server.router(PaymentRoute);
 
 server.listen(3000);
