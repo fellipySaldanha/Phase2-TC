@@ -14,7 +14,7 @@ export default class CreateProduct implements UseCaseInterface {
 
   async execute(input: CreateProductInputDTO): Promise<CreateProductOutputDTO> {
     try {
-      const errors: string[] = this.validateFields(input);
+      const errors: string[] = this.validateRequest(input);
       if (errors?.length > 0) {
         return {
           hasError: true,
@@ -40,23 +40,18 @@ export default class CreateProduct implements UseCaseInterface {
       const output: CreateProductOutputDTO = {
         hasError: true,
         message: 'Failed to create product',
+        array_errors: error,
       };
       return output;
     }
   }
 
-  private validateFields(input: CreateProductInputDTO): string[] {
+  private validateRequest(input: CreateProductInputDTO): string[] {
     let errors: string[] = [];
     if (Object.keys(input).length === 0) {
       //return response.status(400).json({ error: 'Missing body.' });
       errors.push('Missing body.');
       return errors;
-    } else if (!input.itemName) {
-      errors.push('Missing value: itemName.');
-    } else if (!input.itemPrice) {
-      errors.push('Missing value: itemPrice.');
-    } else if (!input.itemType) {
-      errors.push('Missing value: itemType.');
     }
 
     return errors;
