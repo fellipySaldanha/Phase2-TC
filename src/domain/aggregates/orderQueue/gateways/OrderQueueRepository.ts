@@ -6,9 +6,7 @@ import {
 } from '../core/entities/OrderQueue';
 import IOrderQueueGateway from '../core/ports/IOrderQueueGateway';
 
-export default class MySqlOrderQueueRepository
-  implements IOrderQueueGateway
-{
+export default class MySqlOrderQueueRepository implements IOrderQueueGateway {
   private connection: mysql.Connection;
 
   constructor(conn?: mysql.Connection) {

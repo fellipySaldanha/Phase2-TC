@@ -4,7 +4,6 @@ import * as dotenv from 'dotenv';
 import ProductController from './domain/aggregates/productMaintenance/application/ProductController';
 import MySqlProductRepository from './domain/aggregates/productMaintenance/infrastructure/MySqlProductRepository';
 import MySQLCustomerRepository from './domain/aggregates/userAccess/gateways/MySQLCustomerRepository';
-import OrderQueueController from './domain/aggregates/orderQueue/controllers/OrderQueueController';
 import MySqlOrderQueueRepository from './domain/aggregates/orderQueue/gateways/OrderQueueRepository';
 import CustomerRoute from './infrastructure/api/customer.route';
 import OrderRoute from './infrastructure/api/order.route';
