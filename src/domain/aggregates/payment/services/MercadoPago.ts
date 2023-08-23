@@ -1,6 +1,6 @@
-import { PaymentGatewayInterface } from '../interfaces/gateways/PaymentGatewayInterface';
+import PaymentProviderInterface from '../interfaces/PaymentProviderInterface';
 
-export class MercadoPago implements PaymentGatewayInterface {
+export class MercadoPago implements PaymentProviderInterface {
   constructor() {
     /////////////////////////////////////////
     //
