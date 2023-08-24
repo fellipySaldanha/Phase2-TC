@@ -14,7 +14,7 @@ export class PaymentRoute {
   async routes() {
     this.httpServer.register(
       'get',
-      '/payment',
+      '/payment/status',
       async (req: Request, res: Response) => {
         try {
           const id = req.query.id ? Number(req.query.id) : undefined;

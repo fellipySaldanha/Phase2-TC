@@ -22,6 +22,7 @@ const customerRoute = new CustomerRoute(server);
 const productRoute = new ProductRoute(server);
 const orderRoute = new OrderRoute(server);
 const orderQueueRoute = new OrderQueueRoute(server);
+const paymentRoute = new PaymentRoute(server);
 
 server.router(CustomerRoute);
 server.router(OrderRoute);

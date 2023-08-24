@@ -14,7 +14,6 @@ import { NewOrderUseCase } from '../usecases/newOrder/NewOrder';
 
 // Entities
 import { OrderEntity } from '../core/entities/OrderEntity';
-import { PaymentRepository } from '../../payment/gateways/PaymentRepository';
 import { MercadoPago } from '../../payment/services/MercadoPago';
 
 export class OrderController {

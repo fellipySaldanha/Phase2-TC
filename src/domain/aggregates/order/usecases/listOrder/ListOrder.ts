@@ -40,6 +40,7 @@ export class ListOrderUseCase {
           customer_id,
           order_items,
         };
+
         output.result?.push(order);
       });
 
