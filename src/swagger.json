@@ -465,6 +465,26 @@
           }
         }
       }
+    },
+    "/payment/status": {
+      "get": {
+        "tags": ["Payments"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status de pagamentos listados com sucesso"
+          },
+          "400": {
+            "description": "Erro ao listar status de pagamentos"
+          }
+        }
+      }
     }
   }
 }

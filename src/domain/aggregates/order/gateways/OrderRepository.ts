@@ -53,8 +53,7 @@ export class MySQLOrderRepository implements OrderGatewayInterface {
     myQuery =
       myQuery +
       ` 
-            GROUP BY O.id, order_status
-            ORDER BY O.order_date DESC, O.id DESC, order_status DESC`;
+            GROUP BY O.id, order_status`;
 
     return await this.commitDB(myQuery, values);
   }

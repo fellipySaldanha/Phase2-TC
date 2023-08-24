@@ -5,10 +5,11 @@ export interface ListOrderInputDTO {
 }
 
 export interface ResultOrderDTO {
-  id: number;
+  order_id: number;
   order_date: Date;
   order_total: number;
-  customer_id: number;
+  order_status?: string;
+  customer_name?: string;
   order_items: IOrderItem[];
 }
 
