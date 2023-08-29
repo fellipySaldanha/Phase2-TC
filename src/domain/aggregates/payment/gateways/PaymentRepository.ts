@@ -31,7 +31,8 @@ export class MySQLPaymentRepository implements PaymentGatewayInterface {
     const values = [orderId];
     let myQuery = `
     SELECT
-        spe.status_payment AS status_por_escrito
+        spe.status_payment AS status_payment,
+        spe.id AS order_id
     FROM
         order_payment op
     JOIN
