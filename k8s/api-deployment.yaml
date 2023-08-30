@@ -32,12 +32,12 @@ spec:
           valueFrom:
             secretKeyRef:
                 name: mysql-secret
-                key: mysql-db                
+                key: mysql-password                
         - name: DB_USER
           valueFrom:
             secretKeyRef:
                 name: mysql-secret
-                key: mysql-db
+                key: mysql-user
         - name: DB_HOST
           valueFrom: 
             configMapKeyRef:
