@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-deployment
+  namespace: default
+  labels:
+    app: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: db
+        io.kompose.network/dev-tech-challenge-network: "true"
+    spec:
+      containers:
+      - name: db
+        image: gabrielpontes/tech-challenge-db:v1.0.5
+        env:
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                    name: mysql-secret
+                    key: mysql-db
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                    name: mysql-secret
+                    key: mysql-user
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                    name: mysql-secret
+                    key: mysql-password
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                    name: mysql-secret
+                    key: mysql-root-password
+        ports:
+            - containerPort: 3306
+              hostPort: 3306
+              protocol: TCP
+        resources: {}
+        volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: db-volume
+      restartPolicy: Always
+      volumes:
+        - name: db-volume
+          persistentVolumeClaim:
+            claimName: db-volume
+status: {}
