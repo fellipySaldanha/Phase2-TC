@@ -64,28 +64,28 @@ https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/
 https://minikube.sigs.k8s.io/docs/
 https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
 
-## Getting started
+## Getting started:
 -> minikube start
 
 <img src="https://raw.githubusercontent.com/kubernetes/minikube/master/site/static/images/screenshot.png" width="575" height="322" alt="screenshot">
 
--> Check if minikube started
-minikube status
+-> Check if minikube started:
+- `minikube status`
 
--> Check if there are services running
-kubectl get service
+-> Check if there are services running:
+- `kubectl get service`
 
--> Deploy the application using minikube cluster
-kubectl apply -f mysql-secret.yml,mysql-configmap.yml,db-deployment.yaml,db-service.yaml,api-deployment.yaml,api-service.yaml
+-> Deploy the application using minikube cluster:
+- `kubectl apply -f mysql-secret.yml,mysql-configmap.yml,db-deployment.yaml,db-service.yaml,api-deployment.yaml,api-service.yaml`
 
--> Check the status of the pods
-kubectl get pod
+-> Check the status of the pods:
+- `kubectl get pod`
 
--> Check the status of the services
-kubectl get service
+-> Check the status of the services:
+- `kubectl get service`
 
--> Give an external IP to the API Service (Get the api service name from the get service command)
-minikube service api-service
+-> Give an external IP to the API Service (Get the api service name from the get service command):
+- `minikube service api-service`
 
 ## Documentação de APIs
 
