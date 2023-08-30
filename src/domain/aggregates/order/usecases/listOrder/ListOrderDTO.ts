@@ -17,4 +17,5 @@ export interface ListOrderOutputDTO {
   hasError: boolean;
   message?: string;
   result?: ResultOrderDTO[];
+  httpCode?: number;
 }
