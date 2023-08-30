@@ -21,9 +21,17 @@ export default class OrderRoute {
           const output: ListOrderOutputDTO = await OrderController.getOrders(
             id,
           );
-          return res.status(200).json(output.result);
+
+          if (output.hasError) {
+            console.log(output.httpCode);
+            return res
+              .status(!output.httpCode ? 500 : output.httpCode)
+              .json({ Error: output.message });
+          } else {
+            return res.status(200).json(output.result);
+          }
         } catch (error) {
-          return res.status(400).json({ error });
+          return res.status(500).json({ error });
         }
       },
     );
@@ -34,7 +42,14 @@ export default class OrderRoute {
       async (req: Request, res: Response) => {
         try {
           const result = await OrderController.newOrder(req.body);
-          res.status(201).json(result);
+          if (result?.hasError) {
+            console.log(result.httpCode);
+            return res
+              .status(!result.httpCode ? 500 : result.httpCode)
+              .json({ Error: result.message });
+          } else {
+            return res.status(201).json(result?.result);
+          }
         } catch (error) {
           res.status(400).json({ error });
         }

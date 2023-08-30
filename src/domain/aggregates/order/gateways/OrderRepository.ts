@@ -69,7 +69,7 @@ export class MySQLOrderRepository implements OrderGatewayInterface {
     });
   }
 
-  async newOrder(customerId: number, total: number): Promise<number | void> {
+  async newOrder(customerId: number, total: number): Promise<number> {
     try {
       const insertQuery =
         'INSERT INTO orders (order_date, order_total, customer_id) VALUES (NOW(), ?, ?)';
@@ -78,7 +78,9 @@ export class MySQLOrderRepository implements OrderGatewayInterface {
 
       return result.insertId;
     } catch (err) {
-      console.log('Error inserting a new Order', err);
+      const msg = "Error inserting a new Order";
+      console.log(msg, err);
+      throw new Error(msg);
     }
   }
 
@@ -93,7 +95,9 @@ export class MySQLOrderRepository implements OrderGatewayInterface {
       ]);
       await this.commitDB(insertItemsQuery, [formattedItems]);
     } catch (err) {
-      console.log('Error inserting Order Items', err);
+      const msg = "Error inserting Order Items";
+      console.log(msg, err);
+      throw new Error(msg);
     }
   }
 
@@ -104,8 +108,21 @@ export class MySQLOrderRepository implements OrderGatewayInterface {
       const result = await orderQueueRepository.getOrderQueue(orderId);
       return Number(result);
     } catch (err) {
-      console.log('Error adding a new order into the order queue', err);
-      return null;
+      const msg = "Error adding a new order into the order queue"
+      console.log(msg, err);
+      throw new Error(msg);
     }
   }
+
+  async getItemPrices(items: number[]): Promise<any> {
+    try {
+      const query = 'SELECT id, item_price from itens WHERE id IN (?) ORDER BY ID';
+      return await this.commitDB(query, [items]);
+    } catch (err) {
+      const msg = "Error getting Order Items prices";
+      console.log(msg, err);
+      throw new Error(msg);
+    }
+  }
+
 }

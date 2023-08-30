@@ -1,9 +1,13 @@
 import { IOrderItem } from '../../interfaces/IOrderItem';
 
 export interface NewOrderInputDTO {
-  id: number;
-  order_date: Date;
-  order_total: number;
-  customer_id: number;
+  customer_id?: number;
   order_items: IOrderItem[];
+}
+
+export interface NewOrderOutputDTO {
+  hasError: boolean;
+  orderId: number;
+  message?: string;
+  httpCode?: number;
 }

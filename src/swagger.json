@@ -357,9 +357,6 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "order_total": {
-                    "type": "number"
-                  },
                   "customer_id": {
                     "type": "string"
                   },
@@ -392,7 +389,6 @@
                 "example2": {
                   "summary": "Exemplo de corpo de requisição sem identificação do Cliente",
                   "value": {
-                    "order_total": 50.99,
                     "order_items": [
                       {
                         "order_item_qtd": 1,
@@ -404,7 +400,6 @@
                 "example3": {
                   "summary": "Exemplo de corpo de requisição com Cliente identificado",
                   "value": {
-                    "order_total": 50.99,
                     "customer_id": 1,
                     "order_items": [
                       {

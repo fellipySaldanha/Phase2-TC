@@ -6,7 +6,7 @@ import {
   ListOrderInputDTO,
   ListOrderOutputDTO,
 } from '../usecases/listOrder/ListOrderDTO';
-import { NewOrderInputDTO } from '../usecases/newOrder/NewOrderDTO';
+import { NewOrderInputDTO, NewOrderOutputDTO } from '../usecases/newOrder/NewOrderDTO';
 
 // UseCases
 import { ListOrderUseCase } from '../usecases/listOrder/ListOrder';
@@ -25,9 +25,18 @@ export class OrderController {
     return await ListOrderUseCase.execute(input, orderGateway);
   }
 
-  static async newOrder(body: NewOrderInputDTO): Promise<OrderEntity | null> {
+  static async newOrder(body: NewOrderInputDTO): Promise<ListOrderOutputDTO | null> {
     const orderGateway = new MySQLOrderRepository();
     const paymentProvider = new MercadoPago();
-    return await NewOrderUseCase.execute(body, orderGateway, paymentProvider);
+
+    let output: NewOrderOutputDTO = await NewOrderUseCase.execute(body, orderGateway, paymentProvider);
+    if (! output.hasError){
+      const input: ListOrderInputDTO = {
+        id: output.orderId
+      };
+      return await ListOrderUseCase.execute(input, orderGateway);
+    } else {
+      return output;
+    }
   }
 }

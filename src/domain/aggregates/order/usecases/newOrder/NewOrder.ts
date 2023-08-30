@@ -1,5 +1,5 @@
 // DTOs
-import { NewOrderInputDTO } from './NewOrderDTO';
+import { NewOrderInputDTO, NewOrderOutputDTO } from './NewOrderDTO';
 
 // Interfaces
 import { IOrderItem } from '../../interfaces/IOrderItem';
@@ -11,30 +11,44 @@ import { OrderGatewayInterface } from '../../interfaces/gateways/OrderGatewayInt
 import { OrderEntity } from '../../core/entities/OrderEntity';
 import { OrderItemEntity } from '../../core/entities/OrderItemEntity';
 import PaymentProviderInterface from '../../../payment/interfaces/PaymentProviderInterface';
+import { ListOrderInputDTO, ListOrderOutputDTO } from '../listOrder/ListOrderDTO';
+import { ListOrderUseCase } from '../listOrder/ListOrder';
 
 export class NewOrderUseCase {
+
   static async execute(
     body: NewOrderInputDTO,
-    OrderGateway: OrderGatewayInterface,
+    orderGateway: OrderGatewayInterface,
     paymentGateway: PaymentProviderInterface,
-  ): Promise<OrderEntity | null> {
+    ): Promise<NewOrderOutputDTO> {
+
+    let _order: OrderEntity;
+    let _orderItems: OrderItemEntity[] = [];
+
     try {
-      const { order_total, customer_id, order_items } = body;
+      const { customer_id, order_items } = body;
 
-      OrderGateway.beginTransaction();
+      _orderItems = await this.loadItemPrices(orderGateway, body.order_items);
+      _order = new OrderEntity(body.customer_id, _orderItems);
+      const order_total = _order.totalOrderPrice();
 
-      const order_id = await OrderGateway.newOrder(
+      orderGateway.beginTransaction();
+
+      let order_id = await orderGateway.newOrder(
         customer_id || 1,
         order_total,
       );
-      if (!order_id) return null;
 
       //Simulate the payment process
       if (!paymentGateway.makePayment(order_id, order_total)) {
-        OrderGateway.rollback();
-        throw new Error(
-          'Unable to proceed with the order payment! Please, try again later',
-        );
+        orderGateway.rollback();
+        let output: NewOrderOutputDTO = {
+          orderId: 0,
+          hasError: true,
+          message:'Unable to proceed with the order payment! Please, try again later',
+          httpCode: 503,
+        }
+        return output;
       }
 
       //insert order_items
@@ -42,23 +56,28 @@ export class NewOrderUseCase {
         order_id,
         order_items,
       );
-      await OrderGateway.insertOrderItems(formated_order_items);
+      await orderGateway.insertOrderItems(formated_order_items);
 
       //adding order into the order_queue
-      await OrderGateway.addOrderQueue(order_id);
+      await orderGateway.addOrderQueue(order_id);
 
-      OrderGateway.commit();
-      return new OrderEntity(
-        order_id,
-        new Date(),
-        order_total,
-        customer_id,
-        formated_order_items,
-      );
+      orderGateway.commit();
+
+      let output: NewOrderOutputDTO = { hasError: false, orderId: order_id, httpCode: 200 };
+      return output;
+
     } catch (error) {
-      console.log('Error update customer', error);
-      OrderGateway.rollback();
-      return null;
+      console.log('Error by inserting a new order. Please, check your data.', error);
+      orderGateway.rollback();
+      
+      let output: NewOrderOutputDTO = {
+        orderId: 0,
+        hasError: true,
+        message:'Error by inserting a new order. Please, check your data.',
+        httpCode: 500,
+      }
+
+      return output;
     }
   }
 
@@ -70,19 +89,36 @@ export class NewOrderUseCase {
     for (let i in order_items) {
       const { item_id, order_item_qtd } = order_items[i];
 
-      const orderItemEntity = new OrderItemEntity(
-        order_id,
-        item_id,
-        order_item_qtd,
-      );
-
       queryParams.push({
-        order_id: orderItemEntity.order_id,
-        item_id: orderItemEntity.item_id,
-        order_item_qtd: orderItemEntity.order_item_qtd,
+        order_id: order_id,
+        item_id: order_items[i].item_id,
+        order_item_qtd: order_items[i].order_item_qtd,
       });
     }
-
     return queryParams;
   }
+
+  static async loadItemPrices(gateway: OrderGatewayInterface, order_items: IOrderItem[]) {
+    let ids: number[] = [];
+    let items = new Map<number, IOrderItem>;
+    let ret: OrderItemEntity[] = [];
+
+    for (let i in order_items) {
+      ids.push(order_items[i].item_id);
+      items.set(order_items[i].item_id, order_items[i])
+    }
+    
+    let result = await gateway.getItemPrices(ids);
+    for (let row of result){
+      var ordemItem = new OrderItemEntity();
+      ordemItem.item_id = row.id;
+      ordemItem.order_item_qtd = items.get(row.id)?.order_item_qtd;
+      ordemItem.price = row.item_price;
+
+      ret.push(ordemItem);
+    }
+    
+    return ret;
+  }
+  
 }

@@ -1,6 +1,7 @@
 import { OrderEntity } from '../../core/entities/OrderEntity';
+import { OrderItemEntity } from '../../core/entities/OrderItemEntity';
 import { OrderGatewayInterface } from '../../interfaces/gateways/OrderGatewayInterface';
-import { ListOrderInputDTO, ListOrderOutputDTO } from './ListOrderDTO';
+import { ListOrderInputDTO, ListOrderOutputDTO, ResultOrderDTO } from './ListOrderDTO';
 
 export class ListOrderUseCase {
   static async execute(
@@ -28,7 +29,6 @@ export class ListOrderUseCase {
       };
 
       const filteredOrders = this.filterOrders(orders);
-
       filteredOrders.forEach((element: any) => {
         const {
           order_id,
@@ -40,20 +40,11 @@ export class ListOrderUseCase {
           order_items,
         } = element;
 
-        const orderEntity = new OrderEntity(
-          order_id,
-          order_date,
-          order_total,
-          customer_id,
-          order_items,
-          customer_name,
-          order_status,
-        );
-
+        const orderEntity: ResultOrderDTO = { order_id, order_date, order_total, order_status, customer_name, order_items }  
         output.result?.push(orderEntity);
       });
-
       return output;
+
     } catch (error: any) {
       console.log('Error in query Database', error);
       const output = {
@@ -86,8 +77,8 @@ export class ListOrderUseCase {
         }
       }
 
-      const dateA = new Date(a.order_date).getTime();
-      const dateB = new Date(b.order_date).getTime();
+      const dateA = new Date(Number(a.order_date)).getTime();
+      const dateB = new Date(Number(b.order_date)).getTime();
 
       return dateB - dateA; // Ordenação decrescente por data
     });
