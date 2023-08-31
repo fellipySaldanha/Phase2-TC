@@ -29,7 +29,6 @@ export default class OrderQueueRoute {
             await OrderQueueController.getOrderQueue(Number(req.query.id));
 
           if (output.hasError) {
-            console.log(output.httpCode);
             return resp
               .status(!output.httpCode ? 500 : output.httpCode)
               .json({ Error: output.message });
@@ -59,7 +58,6 @@ export default class OrderQueueRoute {
           );
 
           if (output.hasError) {
-            console.log(output.httpCode);
             return resp
               .status(!output.httpCode ? 500 : output.httpCode)
               .json({ Error: output.message });

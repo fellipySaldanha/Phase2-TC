@@ -13,7 +13,6 @@ export default class ListProduct implements UseCaseInterface {
     let result;
     try {
       if (input.itemId && input.itemId != 0) {
-        //console.log('@@@@@@Passei onde deveria');
         result = await this.repository.getProductById(Number(input.itemId));
       } else {
         result = await this.repository.getProducts();
