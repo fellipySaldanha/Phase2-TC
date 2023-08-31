@@ -52,7 +52,40 @@ https://miro.com/app/board/uXjVMKvnUGA=/?share_link_id=537199265716
 
 ## Iniciar Aplicação
 
-Executar o comando: `docker compose up --build`
+## Deployment dependencies
+
+<img src="https://github.com/kubernetes/minikube/raw/master/images/logo/logo.png" width="100" alt="minikube logo">
+
+### Installation
+https://minikube.sigs.k8s.io/docs/start/
+https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/
+
+### Documentation
+https://minikube.sigs.k8s.io/docs/
+https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
+
+## Getting started:
+-> minikube start
+
+<img src="https://raw.githubusercontent.com/kubernetes/minikube/master/site/static/images/screenshot.png" width="575" height="322" alt="screenshot">
+
+-> Check if minikube started:
+- `minikube status`
+
+-> Check if there are services running:
+- `kubectl get service`
+
+-> Deploy the application using minikube cluster:
+- `kubectl apply -f mysql-secret.yml,mysql-configmap.yml,db-deployment.yaml,db-service.yaml,api-deployment.yaml,api-service.yaml`
+
+-> Check the status of the pods:
+- `kubectl get pod`
+
+-> Check the status of the services:
+- `kubectl get service`
+
+-> Give an external IP to the API Service (Get the api service name from the get service command):
+- `minikube service api-service`
 
 ## Documentação de APIs
 
