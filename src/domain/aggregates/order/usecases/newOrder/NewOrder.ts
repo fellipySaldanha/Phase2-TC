@@ -11,17 +11,17 @@ import { OrderGatewayInterface } from '../../interfaces/gateways/OrderGatewayInt
 import { OrderEntity } from '../../core/entities/OrderEntity';
 import { OrderItemEntity } from '../../core/entities/OrderItemEntity';
 import PaymentProviderInterface from '../../../payment/interfaces/PaymentProviderInterface';
-import { ListOrderInputDTO, ListOrderOutputDTO } from '../listOrder/ListOrderDTO';
-import { ListOrderUseCase } from '../listOrder/ListOrder';
+import { PaymentCheckoutInputDTO } from '../../../payment/usecases/paymentCheckout/PaymentCheckoutDTO';
+import { PaymentMethod } from '../../../../sharedKernel/enums/PaymentMethod';
+import ICheckout from '../../../payment/interfaces/ICheckout';
 
 export class NewOrderUseCase {
-
   static async execute(
     body: NewOrderInputDTO,
     orderGateway: OrderGatewayInterface,
     paymentGateway: PaymentProviderInterface,
-    ): Promise<NewOrderOutputDTO> {
-
+    checkout: ICheckout,
+  ): Promise<NewOrderOutputDTO> {
     let _order: OrderEntity;
     let _orderItems: OrderItemEntity[] = [];
 
@@ -34,22 +34,7 @@ export class NewOrderUseCase {
 
       orderGateway.beginTransaction();
 
-      let order_id = await orderGateway.newOrder(
-        customer_id || 1,
-        order_total,
-      );
-
-      //Simulate the payment process
-      if (!paymentGateway.makePayment(order_id, order_total)) {
-        orderGateway.rollback();
-        let output: NewOrderOutputDTO = {
-          orderId: 0,
-          hasError: true,
-          message:'Unable to proceed with the order payment! Please, try again later',
-          httpCode: 503,
-        }
-        return output;
-      }
+      let order_id = await orderGateway.newOrder(customer_id || 1, order_total);
 
       //insert order_items
       const formated_order_items = NewOrderUseCase.formatOrderItems(
@@ -63,19 +48,32 @@ export class NewOrderUseCase {
 
       orderGateway.commit();
 
-      let output: NewOrderOutputDTO = { hasError: false, orderId: order_id, httpCode: 200 };
-      return output;
+      let output: NewOrderOutputDTO = {
+        hasError: false,
+        orderId: order_id,
+        httpCode: 200,
+      };
 
+      const inputCheckout: PaymentCheckoutInputDTO = {
+        orderId: order_id,
+        order_items: formated_order_items,
+        paymentMethod: PaymentMethod.QrCode,
+      };
+      const checkoutResult = await checkout.execute(inputCheckout);
+      return output;
     } catch (error) {
-      console.log('Error by inserting a new order. Please, check your data.', error);
+      console.log(
+        'Error by inserting a new order. Please, check your data.',
+        error,
+      );
       orderGateway.rollback();
-      
+
       let output: NewOrderOutputDTO = {
         orderId: 0,
         hasError: true,
-        message:'Error by inserting a new order. Please, check your data.',
+        message: 'Error by inserting a new order. Please, check your data.',
         httpCode: 500,
-      }
+      };
 
       return output;
     }
@@ -98,18 +96,21 @@ export class NewOrderUseCase {
     return queryParams;
   }
 
-  static async loadItemPrices(gateway: OrderGatewayInterface, order_items: IOrderItem[]) {
+  static async loadItemPrices(
+    gateway: OrderGatewayInterface,
+    order_items: IOrderItem[],
+  ) {
     let ids: number[] = [];
-    let items = new Map<number, IOrderItem>;
+    let items = new Map<number, IOrderItem>();
     let ret: OrderItemEntity[] = [];
 
     for (let i in order_items) {
       ids.push(order_items[i].item_id);
-      items.set(order_items[i].item_id, order_items[i])
+      items.set(order_items[i].item_id, order_items[i]);
     }
-    
+
     let result = await gateway.getItemPrices(ids);
-    for (let row of result){
+    for (let row of result) {
       var ordemItem = new OrderItemEntity();
       ordemItem.item_id = row.id;
       ordemItem.order_item_qtd = items.get(row.id)?.order_item_qtd;
@@ -117,8 +118,7 @@ export class NewOrderUseCase {
 
       ret.push(ordemItem);
     }
-    
+
     return ret;
   }
-  
 }

@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv';
 
 // Interfaces
 import { PaymentGatewayInterface } from '../interfaces/gateways/PaymentGatewayInterface';
+import { OrderPaymentEntity } from '../core/entities/OrderPaymentEntity';
 
 export class MySQLPaymentRepository implements PaymentGatewayInterface {
   private connection: mysql.Connection;
@@ -31,8 +32,9 @@ export class MySQLPaymentRepository implements PaymentGatewayInterface {
     const values = [orderId];
     let myQuery = `
     SELECT
-        spe.status_payment AS status_payment,
-        spe.id AS order_id
+        order_id,
+        status_payment,
+        last_update
     FROM
         order_payment op
     JOIN
@@ -47,6 +49,30 @@ export class MySQLPaymentRepository implements PaymentGatewayInterface {
     }
 
     return await this.commitDB(myQuery, values);
+  }
+
+  async createPayment(
+    orderId: number,
+    paymentMethod: number,
+  ): Promise<OrderPaymentEntity> {
+    let payment: OrderPaymentEntity = OrderPaymentEntity.buildPayment(
+      orderId,
+      paymentMethod,
+    );
+    const values = [
+      payment.order_id,
+      payment.payment_method,
+      payment.last_update,
+      payment.status,
+    ];
+    const insertQuery =
+      'INSERT INTO order_payment (order_id, payment_method_enum_id, last_update, status_payment_enum_id) VALUES (?, ?, ?, ?)';
+    //status_payment_enum_id
+    const result: any = await this.commitDB(insertQuery, values);
+    if (Object.keys(result).length !== 0) {
+      payment.payment_id = result.insertId;
+    }
+    return payment;
   }
 
   private async commitDB(query: string, values: any[]): Promise<OkPacket> {
