@@ -39,6 +39,7 @@ Ao confirmar pagamento, o pedido é enviado para preparo. O cliente pode acompan
 - Express
 - MySQL
 - Docker
+- Kubernetes
 
 ## Domain Driven Design
 
@@ -53,7 +54,7 @@ https://miro.com/app/board/uXjVMKvnUGA=/?share_link_id=537199265716
 
 ## Iniciar Aplicação
 
-## Deployment dependencies
+### Deployment dependencies
 
 <img src="https://github.com/kubernetes/minikube/raw/master/images/logo/logo.png" width="100" alt="minikube logo">
 
@@ -65,7 +66,7 @@ https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/
 https://minikube.sigs.k8s.io/docs/
 https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
 
-## Getting started:
+### Getting started:
 -> minikube start
 
 <img src="https://raw.githubusercontent.com/kubernetes/minikube/master/site/static/images/screenshot.png" width="575" height="322" alt="screenshot">
@@ -90,7 +91,7 @@ https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
 
 ## Documentação de APIs
 
-Após iniciar a aplicação, o swagger com as APIs estará disponivel em: [http://localhost:3000/api-docs](http://127.0.0.1:51367/api-docs)
+Após iniciar a aplicação, o swagger com as APIs estará disponivel em: [http://127.0.0.1:51367/api-docs](http://127.0.0.1:51367/api-docs)
 ![image](https://github.com/fellipySaldanha/Phase2-TC/assets/43252661/cc96d1ff-27fb-4aaa-81e2-53872a3cc51b)
 
 
