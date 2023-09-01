@@ -16,35 +16,46 @@ export class ListOrderUseCase {
         result = await OrderGateway.getOrders();
       }
 
-      const orders: OrderEntity[] = result.map((result: any) => {
-        return {
-          ...result,
-          order_items: JSON.parse(result.order_items),
-        };
-      });
-
+      let msg: string;
       let output: ListOrderOutputDTO = {
         hasError: false,
         result: [],
       };
 
-      const filteredOrders = this.filterOrders(orders);
-      filteredOrders.forEach((element: any) => {
-        const {
-          order_id,
-          order_date,
-          order_total,
-          customer_id,
-          customer_name,
-          order_status,
-          order_items,
-        } = element;
+      if (result.length == 0) {
+        output = { hasError: true, httpCode: 404 };
 
-        const orderEntity: ResultOrderDTO = { order_id, order_date, order_total, order_status, customer_name, order_items }  
-        output.result?.push(orderEntity);
-      });
-      return output;
+        if (params.id) {
+          msg = 'Order ' + Number(params.id) + ' not found. Please, certity that it is a valid Order Number!';
+        } else {
+          msg = 'Ops, No Orders found. Something went wrong... :(';
+        }
+        output.message = msg;
+        console.log(msg);
+        
+        return output;
+      } else {
+        const orders: OrderEntity[] = result.map((result: any) => {
+          return {
+            ...result,
+            order_items: JSON.parse(result.order_items),
+          };
+        });
 
+        const filteredOrders = this.filterOrders(orders);
+        filteredOrders.forEach((element: any) => {
+          const resultOrder: ResultOrderDTO = 
+          { order_id: element.order_id, 
+            order_date: element.order_date, 
+            order_total: element.order_total, 
+            order_status: element.order_status,
+            customer_name: element.customer_name, 
+            order_items: element.order_items} = element;
+            
+            output.result?.push(resultOrder);
+        });
+        return output;
+      }
     } catch (error: any) {
       console.log('Error in query Database', error);
       const output = {
