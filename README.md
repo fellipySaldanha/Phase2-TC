@@ -48,7 +48,8 @@ https://miro.com/app/board/uXjVMKvnUGA=/?share_link_id=537199265716
 
 ## Modelagem de Dados
 
-![Diagrama de Entidades e Relacionamentos - Delivery System (1)](https://github.com/fellipySaldanha/tech-challenge/assets/43252661/7118b3eb-50cf-4b62-b6a3-8fdb9c5d862d)
+![image](https://github.com/fellipySaldanha/Phase2-TC/assets/43252661/71b46bbd-4e17-45d8-9831-e107799d4faf)
+
 
 ## Iniciar Aplicação
 
@@ -89,5 +90,6 @@ https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
 
 ## Documentação de APIs
 
-Após iniciar a aplicação, o swagger com as APIs estará disponivel em: http://localhost:3000/api-docs
-![image](https://github.com/fellipySaldanha/tech-challenge/assets/43252661/ad170fee-5206-4913-950c-bfcd10fc80c9)
+Após iniciar a aplicação, o swagger com as APIs estará disponivel em: [http://localhost:3000/api-docs](http://127.0.0.1:51367/api-docs)
+![image](https://github.com/fellipySaldanha/Phase2-TC/assets/43252661/b1ae0e25-411a-497f-b1f2-f470994c93b3)
+
