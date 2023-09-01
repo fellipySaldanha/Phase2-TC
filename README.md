@@ -91,5 +91,6 @@ https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
 ## Documentação de APIs
 
 Após iniciar a aplicação, o swagger com as APIs estará disponivel em: [http://localhost:3000/api-docs](http://127.0.0.1:51367/api-docs)
-![image](https://github.com/fellipySaldanha/Phase2-TC/assets/43252661/b1ae0e25-411a-497f-b1f2-f470994c93b3)
+![image](https://github.com/fellipySaldanha/Phase2-TC/assets/43252661/cc96d1ff-27fb-4aaa-81e2-53872a3cc51b)
+
 
