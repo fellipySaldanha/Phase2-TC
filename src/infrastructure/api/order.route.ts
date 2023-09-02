@@ -23,7 +23,6 @@ export default class OrderRoute {
           );
 
           if (output.hasError) {
-            console.log(output.httpCode);
             return res
               .status(!output.httpCode ? 500 : output.httpCode)
               .json({ Error: output.message });
@@ -43,7 +42,6 @@ export default class OrderRoute {
         try {
           const result = await OrderController.newOrder(req.body);
           if (result?.hasError) {
-            console.log(result.httpCode);
             return res
               .status(!result.httpCode ? 500 : result.httpCode)
               .json({ Error: result.message });

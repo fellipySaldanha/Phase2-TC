@@ -25,7 +25,6 @@ export default class Product {
 
   validateProperties() {
     let array_errors: string[] = [];
-    //console.log('@@@@PASSEI VALIDAÇÃO');
     if (!this.itemName) array_errors.push('Error...itemName is required');
     if (!this.itemPrice) array_errors.push('Error...itemPrice is required');
     if (!this.itemType) array_errors.push('Error...itemType is required');

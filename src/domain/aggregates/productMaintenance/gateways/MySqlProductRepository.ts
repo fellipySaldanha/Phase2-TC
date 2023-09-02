@@ -159,7 +159,6 @@ export default class MySqlProductRepository implements IProductRepository {
       const query = `DELETE FROM itens WHERE id = ?`;
       const queryParams = [id];
       const result = await queryPromise(query, queryParams);
-      //console.log(result);
       return result;
     } catch (error) {
       console.log('ERROR delete product id', error);
