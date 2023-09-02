@@ -22,6 +22,17 @@ export default class ExpressAdapter implements HttpServer {
       swaggerUI.serve,
       swaggerUI.setup(swaggerDocument),
     );
+    this.server.use(
+      (
+        req: { url: string },
+        res: { redirect: (arg0: string) => void },
+        next: () => void,
+      ) => {
+        if (req.url == '/') {
+          res.redirect('/api-docs');
+        }
+      },
+    );
   }
 
   public router(route: any) {
