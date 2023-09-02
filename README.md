@@ -78,7 +78,7 @@ https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
 - `kubectl get service`
 
 -> Deploy the application using minikube cluster:
-- `kubectl apply -f mysql-secret.yml,mysql-configmap.yml,db-deployment.yaml,db-service.yaml,api-deployment.yaml,api-service.yaml`
+- `kubectl apply -f kubectl apply -f k8s`
 
 -> Check the status of the pods:
 - `kubectl get pod`
