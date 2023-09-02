@@ -89,9 +89,12 @@ https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
 -> Give an external IP to the API Service (Get the api service name from the get service command):
 - `minikube service api-service`
 
+
 ## Documentação de APIs
 
-Após iniciar a aplicação, o swagger com as APIs estará disponivel em: [http://127.0.0.1:51367/api-docs](http://127.0.0.1:51367/api-docs)
+Após iniciar a aplicação no minikube, o swagger com as APIs estará disponivel no link exibido no terminal 
+![image](https://github.com/fellipySaldanha/Phase2-TC/assets/43252661/5dc8cbe3-b9ce-4afe-8cf0-c1202ff47b9b)
+
 ![image](https://github.com/fellipySaldanha/Phase2-TC/assets/43252661/cc96d1ff-27fb-4aaa-81e2-53872a3cc51b)
 
 
