@@ -78,7 +78,7 @@ https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
 - `kubectl get service`
 
 -> Deploy the application using minikube cluster:
-- `kubectl apply -f kubectl apply -f k8s`
+- `kubectl apply -f k8s`
 
 -> Check the status of the pods:
 - `kubectl get pod`
