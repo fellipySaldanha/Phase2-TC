@@ -13,6 +13,20 @@ services:
       - db-volume:/var/lib/mysql
     networks:
       - tech-challenge-network
+
+  api:
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      - DB_HOST=db
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+    depends_on:
+      - db
+    networks:
+      - tech-challenge-network
 volumes:
   db-volume:
 networks:
