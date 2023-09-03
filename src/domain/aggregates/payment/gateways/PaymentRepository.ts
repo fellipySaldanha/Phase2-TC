@@ -10,6 +10,7 @@ export class MySQLPaymentRepository implements PaymentGatewayInterface {
 
   constructor() {
     dotenv.config();
+    console.log('Start of PaymentRepository constructor');
     this.connection = mysql.createConnection({
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
@@ -73,6 +74,14 @@ export class MySQLPaymentRepository implements PaymentGatewayInterface {
       payment.payment_id = result.insertId;
     }
     return payment;
+  }
+
+  async confirmPayment(orderId: number, paymentStatus: number) {
+    const values = [1, new Date(), 1];
+    const query =
+      'UPDATE order_payment SET status_payment_enum_id=?, last_update=? WHERE id=?';
+    const result = await this.commitDB(query, values);
+    return result;
   }
 
   private async commitDB(query: string, values: any[]): Promise<OkPacket> {

@@ -6,4 +6,6 @@ export interface PaymentGatewayInterface {
     orderId: number,
     paymentMethod: number,
   ): Promise<OrderPaymentEntity>;
+
+  confirmPayment(orderId: number, paymentStatus: number): any;
 }

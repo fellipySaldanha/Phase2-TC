@@ -480,6 +480,19 @@
           }
         }
       }
+    },
+    "/webhook/confirm_webhook_payment": {
+      "post": {
+        "tags": ["Webhooks"],
+        "responses": {
+          "200": {
+            "description": "Confirmação de pagamento alterada com sucesso"
+          },
+          "400": {
+            "description": "Erro ao atualizar a confirmação de pagamento"
+          }
+        }
+      }
     }
   }
 }
