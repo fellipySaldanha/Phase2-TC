@@ -39,6 +39,7 @@ Ao confirmar pagamento, o pedido é enviado para preparo. O cliente pode acompan
 - Express
 - MySQL
 - Docker
+- Kubernetes
 
 ## Domain Driven Design
 
@@ -48,11 +49,12 @@ https://miro.com/app/board/uXjVMKvnUGA=/?share_link_id=537199265716
 
 ## Modelagem de Dados
 
-![Diagrama de Entidades e Relacionamentos - Delivery System (1)](https://github.com/fellipySaldanha/tech-challenge/assets/43252661/7118b3eb-50cf-4b62-b6a3-8fdb9c5d862d)
+![image](https://github.com/fellipySaldanha/Phase2-TC/assets/43252661/71b46bbd-4e17-45d8-9831-e107799d4faf)
+
 
 ## Iniciar Aplicação
 
-## Deployment dependencies
+### Deployment dependencies
 
 <img src="https://github.com/kubernetes/minikube/raw/master/images/logo/logo.png" width="100" alt="minikube logo">
 
@@ -64,7 +66,7 @@ https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/
 https://minikube.sigs.k8s.io/docs/
 https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
 
-## Getting started:
+### Getting started:
 -> minikube start
 
 <img src="https://raw.githubusercontent.com/kubernetes/minikube/master/site/static/images/screenshot.png" width="575" height="322" alt="screenshot">
@@ -76,7 +78,7 @@ https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
 - `kubectl get service`
 
 -> Deploy the application using minikube cluster:
-- `kubectl apply -f mysql-secret.yml,mysql-configmap.yml,db-deployment.yaml,db-service.yaml,api-deployment.yaml,api-service.yaml`
+- `kubectl apply -f k8s`
 
 -> Check the status of the pods:
 - `kubectl get pod`
@@ -87,7 +89,12 @@ https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
 -> Give an external IP to the API Service (Get the api service name from the get service command):
 - `minikube service api-service`
 
+
 ## Documentação de APIs
 
-Após iniciar a aplicação, o swagger com as APIs estará disponivel em: http://localhost:3000/api-docs
-![image](https://github.com/fellipySaldanha/tech-challenge/assets/43252661/ad170fee-5206-4913-950c-bfcd10fc80c9)
+Após iniciar a aplicação no minikube a url com o swagger das APIs será aberta no navegador, caso não abra acessar o link exibido no terminal 
+![image](https://github.com/fellipySaldanha/Phase2-TC/assets/43252661/5dc8cbe3-b9ce-4afe-8cf0-c1202ff47b9b)
+
+![image](https://github.com/fellipySaldanha/Phase2-TC/assets/43252661/cc96d1ff-27fb-4aaa-81e2-53872a3cc51b)
+
+
