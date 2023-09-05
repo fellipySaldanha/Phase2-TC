@@ -16,38 +16,38 @@ spec:
     metadata:
       labels:
         app: db
-        io.kompose.network/dev-tech-challenge-network: "true"
+        io.kompose.network/dev-tech-challenge-network: 'true'
     spec:
       containers:
-      - name: db
-        image: gabrielpontes/tech-challenge-db:v1.0.5
-        env:
+        - name: db
+          image: gabrielpontes/tech-challenge-db:v1.0.6
+          env:
             - name: MYSQL_DATABASE
               valueFrom:
                 secretKeyRef:
-                    name: mysql-secret
-                    key: mysql-db
+                  name: mysql-secret
+                  key: mysql-db
             - name: MYSQL_USER
               valueFrom:
                 secretKeyRef:
-                    name: mysql-secret
-                    key: mysql-user
+                  name: mysql-secret
+                  key: mysql-user
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                    name: mysql-secret
-                    key: mysql-password
+                  name: mysql-secret
+                  key: mysql-password
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                    name: mysql-secret
-                    key: mysql-root-password
-        ports:
+                  name: mysql-secret
+                  key: mysql-root-password
+          ports:
             - containerPort: 3306
               hostPort: 3306
               protocol: TCP
-        resources: {}
-        volumeMounts:
+          resources: {}
+          volumeMounts:
             - mountPath: /var/lib/mysql
               name: db-volume
       restartPolicy: Always

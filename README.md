@@ -51,7 +51,6 @@ https://miro.com/app/board/uXjVMKvnUGA=/?share_link_id=537199265716
 
 ![image](https://github.com/fellipySaldanha/Phase2-TC/assets/43252661/71b46bbd-4e17-45d8-9831-e107799d4faf)
 
-
 ## Iniciar Aplicação
 
 ### Deployment dependencies
@@ -59,42 +58,48 @@ https://miro.com/app/board/uXjVMKvnUGA=/?share_link_id=537199265716
 <img src="https://github.com/kubernetes/minikube/raw/master/images/logo/logo.png" width="100" alt="minikube logo">
 
 ### Installation
+
 https://minikube.sigs.k8s.io/docs/start/
 https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/
 
 ### Documentation
+
 https://minikube.sigs.k8s.io/docs/
 https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands
 
 ### Getting started:
+
 -> minikube start
 
 <img src="https://raw.githubusercontent.com/kubernetes/minikube/master/site/static/images/screenshot.png" width="575" height="322" alt="screenshot">
 
 -> Check if minikube started:
+
 - `minikube status`
 
 -> Check if there are services running:
+
 - `kubectl get service`
 
 -> Deploy the application using minikube cluster:
+
 - `kubectl apply -f k8s`
 
 -> Check the status of the pods:
+
 - `kubectl get pod`
 
 -> Check the status of the services:
+
 - `kubectl get service`
 
 -> Give an external IP to the API Service (Get the api service name from the get service command):
-- `minikube service api-service`
 
+- `minikube service api-service`
 
 ## Documentação de APIs
 
-Após iniciar a aplicação no minikube a url com o swagger das APIs será aberta no navegador, caso não abra acessar o link exibido no terminal 
+Após iniciar a aplicação no minikube, acessar o link exibido no terminal e adicionar ao final `/api-docs`
 ![image](https://github.com/fellipySaldanha/Phase2-TC/assets/43252661/5dc8cbe3-b9ce-4afe-8cf0-c1202ff47b9b)
 
 ![image](https://github.com/fellipySaldanha/Phase2-TC/assets/43252661/cc96d1ff-27fb-4aaa-81e2-53872a3cc51b)
-
-
