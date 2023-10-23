@@ -7,7 +7,7 @@ dotenv.config();
 const secretKey = process.env.SECRET_KEY_JWT_TOKEN;
 
 export function verifyToken(req: Request, res: Response, next: NextFunction) {
-  const token = req.header('Authorization');
+  const token = req.header('Authorization')?.replace('Bearer ', '');
 
   if (!token) return res.status(401).json({ message: 'Token não fornecido' });
 
